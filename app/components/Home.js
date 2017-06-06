@@ -2,7 +2,9 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Sidebar from './sidebar'
+import Hero from './hero'
 import Header from './header'
+import Tx from './tx'
 import styles from './Home.scss'
 let ssbClient = window.require('ssb-client')
 
@@ -13,14 +15,18 @@ export default class Home extends Component {
       console.log(sbot)
     })
   }
-  render() {
+  render () {
     return (
       <div>
-        <div className={styles.container} data-tid="container">
-          <Header />
-          <Sidebar />
-          <h2>riprooova</h2>
-          <Link to="/counter">to Counter</Link>
+        <Header />
+        <Sidebar />
+        <div className={styles.wrapper}>
+          <Hero />
+          <div className={styles.row}>
+            <div className={styles.columns + ' ' + styles['medium-centered'] + ' ' + styles['medium-10']}>
+              <Tx />
+            </div>
+          </div>
         </div>
       </div>
     );
