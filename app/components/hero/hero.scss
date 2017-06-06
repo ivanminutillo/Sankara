@@ -1,0 +1,50 @@
+@import "../../styles/app.scss";
+
+.hero {
+    height: 200px;
+    background: url('./background.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
+    &:before {
+        position: absolute;
+        content: "";
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background: rgba(0,0,0,.3);
+        z-index: 1;
+    }  
+    .hero_title {
+        position: relative;
+        z-index: 2;
+        @include text-title-regular(white);
+        font-weight: 800;
+        text-align: center;
+        padding-top: 60px;
+
+    }
+    .hero_infos {
+        text-align: center;
+        position: relative;
+        z-index: 2;
+        margin-top: 20px;
+        @include clearfix;
+        span {
+            width: 160px;
+            margin: 0 auto;
+            height: 30px;
+            display: inline-block;
+            border: 1px solid white;
+            border-radius: 2px;
+            text-align: center;
+            @include text-general-black(white);
+            line-height: 30px;
+            margin-right: 20px;
+            &:last-of-type {
+                margin-right: 0;
+            }
+        }
+    }
+}
