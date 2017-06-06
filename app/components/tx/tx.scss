@@ -1,0 +1,51 @@
+@import "../../styles/app.scss";
+
+.tx {
+    height: 200px;
+    margin-top: 40px;
+    box-shadow: 0 1px 4px 0px rgba(0,0,0,.2);
+    border-radius: 2px;
+    background: white;
+    .tx_title {
+      height: 30px;
+      @include text-mini-black(#6C6C6C);
+      text-transform: uppercase;
+      line-height: 30px;
+      border-bottom: 1px solid #E7E7E7;
+      background: #F6F6F6;
+      padding-left: 10px;
+    }
+    .tx_form {
+        input {
+            border: none;
+        }
+        .form_to {
+            height: 60px;
+            width: 40%;
+            line-height: 60px;
+        }
+        .form_amount {
+            height: 60px;
+            width: 40%;
+            line-height: 60px;
+            border-left: 1px solid #E7E7E7;
+        }
+        .form_description {
+            width: 100%;
+            display: block;
+            border-top: 1px solid #E7E7E7;
+            height: 110px;
+        }
+        .form_publish {
+            float: right;
+            height: 30px;
+            border-radius: 2px;
+            width: 120px;
+            background: #304B63;
+            @include text-mini-black(white);
+            text-align: center;
+            margin-top: -40px;
+            margin-right: 10px;
+        }
+    }
+}
