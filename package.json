@@ -189,6 +189,7 @@
     "electron-debug": "^1.1.0",
     "font-awesome": "^4.7.0",
     "history": "^4.6.1",
+    "pull-stream": "3.6.0",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-hot-loader": "3.0.0-beta.6",
@@ -197,7 +198,9 @@
     "react-router-dom": "^4.1.1",
     "react-router-redux": "^5.0.0-alpha.6",
     "redux": "^3.6.0",
+    "redux-observable": "0.14.1",
     "redux-thunk": "^2.2.0",
+    "rxjs": "5.4.0",
     "source-map-support": "^0.4.15",
     "ssb-client": "4.4.1"
   },

@@ -1,11 +1,14 @@
 // @flow
-import { combineReducers } from 'redux';
-import { routerReducer as router } from 'react-router-redux';
-import counter from './counter';
+import { combineReducers } from 'redux'
+import { routerReducer as router } from 'react-router-redux'
+import ssb from './ssb'
+import {feed, userFeed} from './feed'
 
 const rootReducer = combineReducers({
-  counter,
-  router,
-});
+  ssb,
+  feed,
+  userFeed,
+  router
+})
 
-export default rootReducer;
+export default rootReducer

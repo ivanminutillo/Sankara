@@ -3,13 +3,16 @@ import React from 'react'
 import { Switch, Route } from 'react-router'
 import App from './pages/App'
 import HomePage from './pages/HomePage'
-import CounterPage from './pages/CounterPage'
+import CurrencyPage from './pages/CurrencyPage'
+import SiteTemplate from './templates/SiteTemplate'
 
 export default () => (
   <App>
     <Switch>
-      <Route path='/counter' component={CounterPage} />
-      <Route path='/' component={HomePage} />
+      <SiteTemplate>
+        <Route path='/currency/:name' component={CurrencyPage} />
+        <Route path='/' component={HomePage} />
+      </SiteTemplate>
     </Switch>
   </App>
 )
