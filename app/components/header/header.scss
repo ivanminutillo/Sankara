@@ -13,15 +13,28 @@
         @include text-general-black($p900);
         text-transform: uppercase;
         line-height: 60px;
+        float: left;
         margin-left: 20px;
     }
-    .header_form {
-        float: right;
-        height: 40px;
+    .header_right {
+      float: right;
+      @include clearfix;
+      .right_username {
+        display: inline-block;
+        @include text-general-black($p900);
         margin-right: 20px;
+        line-height: 60px;
+        text-transform: capitalize;
+      }
+    }
+    .header_form {
+        height: 40px;
         margin-top: -50px;
-        border-left: 1px solid #d9d9d9;
+        display: inline-block;
+        border-radius: 2px;
         .form_search {
+            border-radius: 2px;
+            background: #f4f4f4;
             line-height: 40px;
             display: block;
             height: 40px;
