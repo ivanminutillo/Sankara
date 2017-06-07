@@ -61,6 +61,8 @@
             width: 120px;
             background: #304B63;
             @include text-mini-black(white);
+            line-height: 30px;
+            cursor: pointer;
             text-align: center;
             margin-top: -40px;
             margin-right: 10px;
