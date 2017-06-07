@@ -1,0 +1,70 @@
+@import "../../styles/app.scss";
+
+.feed {
+    margin-top: 40px;
+    box-shadow: 0 1px 4px 0px rgba(0,0,0,.2);
+    border-radius: 2px;
+    background: white;
+    margin-bottom: 60px;
+    .feed_title {
+      height: 30px;
+      @include text-mini-black(#6C6C6C);
+      text-transform: uppercase;
+      line-height: 30px;
+      border-bottom: 1px solid #E7E7E7;
+      background: #F6F6F6;
+      padding-left: 10px;
+    }
+}
+
+.feed_list {
+    .list_item {
+        border-bottom: 1px solid #E7E7E7;
+        padding: 20px;
+    }            
+}
+
+.item_title {
+    .title_photo {
+     background: url('./prof.jpg');
+     background-size: cover;
+     background-repeat: no-repeat;
+     background-position: center center;
+     display: block;
+     float: left;
+     margin-right: 10px; 
+     border-radius: 100%;
+     width: 30px;
+     height: 30px;
+     border: 1px solid white;
+    }   
+    .title_info {
+      @include text-general($p900);
+      padding-top: 5px;
+    }
+    .title_description {
+        @include text-general($p700);
+        margin-top: 20px;
+        position: relative;
+        height: 40px;
+        line-height: 40px;
+        margin-left: 10px;
+        padding-left: 10px;
+        &:before {
+            position: absolute;
+            content: "";
+            left: -10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #E7E7E7;
+
+        }
+    }   
+    .title_secondary {
+        margin-top: 10px;
+        .secondary_date {
+          @include text-mini-black(#9E9E9E);
+        }
+    }      
+}
