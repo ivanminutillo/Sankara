@@ -5,6 +5,7 @@ import Sidebar from './sidebar'
 import Hero from './hero'
 import Header from './header'
 import Tx from './tx'
+import Feed from './feed'
 import styles from './Home.scss'
 let ssbClient = window.require('ssb-client')
 
@@ -25,6 +26,7 @@ export default class Home extends Component {
           <div className={styles.row}>
             <div className={styles.columns + ' ' + styles['medium-centered'] + ' ' + styles['medium-10']}>
               <Tx />
+              <Feed />
             </div>
           </div>
         </div>
