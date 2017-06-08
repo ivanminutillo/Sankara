@@ -15,18 +15,49 @@
     background: linear-gradient(to bottom, rgba(40,62,81,1) 0%, rgba(75,121,161,1) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#283e51', endColorstr='#4b79a1', GradientType=0 );
     .sidebar_title {
-        @include text-mini-black(white);
+        @include text-mini-black(rgba(255,255,255, .6));
         margin-left: 20px;
         margin-top: 40px;
         text-transform: uppercase;
     }
     .sidebar_list {
         margin-left: 20px;
-        margin-top: 20px;
+        margin-top: 15px;
         .list_item {
             @include text-general(white);
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             text-transform: uppercase;
+            .item_link {
+                position: relative;
+                &.active {
+                @include text-general-black(white);
+                &:before {
+                    content: '';
+                    position: absolute;
+                    left: -20px;
+                    top: 0;
+                    bottom: 0;
+                    width: 3px;
+                    background: white;
+                    display: block;
+                }
+                }
+
+            }
+
         }
+    }
+    .sidebar_join {
+        background: $accent-100;
+        width: 180px;
+        height: 30px;
+        @include text-mini-black($p100);
+        line-height: 30px;
+        text-transform: uppercase;
+        text-align: center;
+        position: absolute;
+        border-radius:2px;
+        bottom: 20px;
+        left: 20px;
     }
 }

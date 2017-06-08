@@ -1,9 +1,10 @@
-// @flow
 import React, { Component } from 'react'
 import Hero from './hero'
 import Tx from './tx'
 import Feed from './feed'
 import styles from './page.scss'
+var pull = require('pull-stream')
+var schemas = require('../utils/mutualSsb/schemas')
 
 class Currency extends Component {
   constructor () {
@@ -16,6 +17,28 @@ class Currency extends Component {
       to: '',
       amount: 0,
       description: ''
+    }
+  }
+
+  componentDidUpdate (prevProps) {
+    let _this = this
+    if (prevProps.mutual !== this.props.mutual && this.props.mutual.config ||  this.props.mutual.config && prevProps.location.pathname !== this.props.location.pathname) {
+      this.props.mutual.getAccountBalance({account: this.props.sbot.id, currency: this.props.match.params.name}, function (err, amount) {
+        _this.props.updateBalance(amount)
+      })
+      pull(
+        this.props.mutual.streamAccountHistory({account: this.props.sbot.id}),
+        pull.collect(function (err, tsx) {
+        })
+      )
+      
+      // var value = schemas.credit('%U1v3xx8ib4iYfMxdOA9PLzyE8EFMD3i4C5lANk7ksTA=.sha256', 4, 'ECO', 'a beer')
+      // this.props.sbot.publish(value, function (err, msg) {
+      //   console.log(msg)
+      //   _this.props.mutual.getAccountBalance({account: _this.props.sbot.id, currency: 'ECO'}, function (err, amount) {
+      //   console.log(amount)
+      //   })
+      // })
     }
   }
 
@@ -61,6 +84,7 @@ class Currency extends Component {
         <Hero
           currency={this.props.match.params.name}
           memberList={this.props.feed}
+          balance={this.props.currency.balance}
         />
         <div className={styles.row}>
           <div className={styles.columns + ' ' + styles['medium-centered'] + ' ' + styles['medium-10']}>

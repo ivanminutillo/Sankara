@@ -7,12 +7,10 @@ import CurrencyPage from './pages/CurrencyPage'
 import SiteTemplate from './templates/SiteTemplate'
 
 export default () => (
-  <App>
+  <SiteTemplate>
     <Switch>
-      <SiteTemplate>
-        <Route path='/currency/:name' component={CurrencyPage} />
-        <Route path='/' component={HomePage} />
-      </SiteTemplate>
+      <Route exact path='/' component={HomePage} />
+      <Route path='/currency/:name' component={CurrencyPage} />
     </Switch>
-  </App>
+  </SiteTemplate>
 )

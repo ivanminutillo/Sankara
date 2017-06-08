@@ -1,5 +1,4 @@
-import {GET_FEED, GET_USER_FEED} from '../actions/feed'
-
+import {GET_FEED, GET_USER_FEED, UPDATE_FEED_WITH_NAME} from '../actions/feed'
 const feedState = []
 const userFeedState = []
 

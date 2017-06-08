@@ -10,7 +10,7 @@
 
 ## Install
 
-The app is based on[electron-react-boilerplate](https://github.com/chentsulin/electron-react-boilerplate)
+The app is based on [electron-react-boilerplate](https://github.com/chentsulin/electron-react-boilerplate)
 
 * **Note: requires a node version >= 6 and an npm version >= 3.**
 

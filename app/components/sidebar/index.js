@@ -1,15 +1,15 @@
 import * as React from 'react'
 import styles from './sidebar.scss'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 const Sidebar = (props) => {
   let uniqueCurrencies = []
   uniqueCurrencies = props.currencies
-  .map(currency => currency.value.content.currency)
+  .map(item => item.currency)
   .filter((item, i, ar) => ar.indexOf(item) === i)
   .map((item, i) => (
     <li key={i} className={styles.list_item}>
-      <Link to={'/currency/' + item} className={styles.item_link}>{item}</Link>
+      <NavLink to={'/currency/' + item} activeClassName={styles.active} className={styles.item_link}>{item}</NavLink>
     </li>
   ))
   return (
@@ -18,6 +18,7 @@ const Sidebar = (props) => {
       <ul className={styles.sidebar_list}>
         {uniqueCurrencies}
       </ul>
+      <button className={styles.sidebar_join}>Join a new currency</button>
     </aside>
   )
 }
