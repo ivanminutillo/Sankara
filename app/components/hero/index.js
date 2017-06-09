@@ -6,7 +6,6 @@ const Hero = (props) => {
   .filter(item => item.currency === props.currency)
   .map(item => item.author)
   .filter((x, i, a) => a.indexOf(x) === i)
-  console.log(members)
   return (
     <section className={styles.hero}>
       <h2 className={styles.hero_title}>{props.currency}</h2>

@@ -1,11 +1,14 @@
-import {GET_FEED, GET_USER_FEED, UPDATE_FEED_WITH_NAME} from '../actions/feed'
+import {GET_FEED, GET_USER_FEED, UPDATE_FEED} from '../actions/feed'
 const feedState = []
 const userFeedState = []
 
 export function feed (state = feedState, action) {
   switch (action.type) {
     case GET_FEED:
-      return action.payload
+      return [
+        ...state,
+        action.payload
+      ]
     default:
       return state
   }
@@ -14,6 +17,15 @@ export function feed (state = feedState, action) {
 export function userFeed (state = userFeedState, action) {
   switch (action.type) {
     case GET_USER_FEED:
+      return action.payload
+    default:
+      return state
+  }
+}
+
+export function updatedFeed (state = [], action) {
+  switch (action.type) {
+    case UPDATE_FEED:
       return action.payload
     default:
       return state

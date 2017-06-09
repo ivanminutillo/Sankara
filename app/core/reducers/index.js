@@ -4,7 +4,7 @@ import { routerReducer as router } from 'react-router-redux'
 import ssb from './ssb'
 import mutual from './mutual'
 import currency from './currency'
-import {feed, userFeed} from './feed'
+import {feed, userFeed, updatedFeed} from './feed'
 
 const rootReducer = combineReducers({
   ssb,
@@ -12,6 +12,7 @@ const rootReducer = combineReducers({
   userFeed,
   mutual,
   currency,
+  updatedFeed,
   router
 })
 

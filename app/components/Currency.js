@@ -5,6 +5,8 @@ import Feed from './feed'
 import styles from './page.scss'
 var pull = require('pull-stream')
 var schemas = require('../utils/mutualSsb/schemas')
+import getAvatar from 'ssb-avatar'
+var paramap = require('pull-paramap')
 
 class Currency extends Component {
   constructor () {
@@ -30,15 +32,34 @@ class Currency extends Component {
         this.props.mutual.streamAccountHistory({account: this.props.sbot.id}),
         pull.collect(function (err, tsx) {
         })
+      )  
+    }
+    if (prevProps.feed.length !== this.props.feed.length) {
+      pull(
+        pull.values(this.props.feed),
+        paramap(function (data, cb) {
+          getAvatar(_this.props.sbot, data.author, data.author, function (err, info) {
+            let newTx = {
+              ...data,
+              authorName: info.name
+            }
+            cb(err, newTx)
+          })
+        }),
+        paramap(function (data, cb) {
+          getAvatar(_this.props.sbot, data.counterparty, data.counterparty, function (err, counterInfo) {
+            console.log(counterInfo)
+            let newTx = {
+              ...data,
+              counterpartyName: counterInfo.name
+            }
+            cb(err, newTx)
+          })
+        }),
+        pull.collect((err, info) => {
+          _this.props.updateFeed(info)
+        })
       )
-      
-      // var value = schemas.credit('%U1v3xx8ib4iYfMxdOA9PLzyE8EFMD3i4C5lANk7ksTA=.sha256', 4, 'ECO', 'a beer')
-      // this.props.sbot.publish(value, function (err, msg) {
-      //   console.log(msg)
-      //   _this.props.mutual.getAccountBalance({account: _this.props.sbot.id, currency: 'ECO'}, function (err, amount) {
-      //   console.log(amount)
-      //   })
-      // })
     }
   }
 
@@ -99,7 +120,7 @@ class Currency extends Component {
             />
             <Feed
               currency={this.props.match.params.name}
-              feed={this.props.feed}
+              feed={this.props.updatedFeed}
             />
           </div>
         </div>

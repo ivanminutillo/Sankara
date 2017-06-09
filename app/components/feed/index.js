@@ -1,21 +1,27 @@
 import * as React from 'react'
 import styles from './feed.scss'
+import moment from 'moment'
 
 const Feed = (props) => {
   let currencyFeed = []
   currencyFeed = props.feed
   .filter(item => item.currency === props.currency)
   .map(function (item, i) {
-    let name = 'test'
-    let account = 'test2'
+    let date = moment.unix(item.timestamp / 1000).format('DD MMM YYYY - hh:mm a')
+    let description = (<div />)
+    if (item.memo !== undefined) {
+      description = (
+        <div className={styles.title_description}>{item.memo}</div>
+      )
+    }
     return (
       <div key={i} className={styles.list_item}>
         <div className={styles.item_title}>
           <span className={styles.title_photo} />
-          <h2 className={styles.title_info}><b>{name}</b> sent <b>{item.amount} {props.currency}</b> to <b>{account}</b></h2>
-          <div className={styles.title_description}>{item.memo}</div>
+          <h2 className={styles.title_info}><b>{item.authorName}</b> sent <b>{item.amount} {props.currency}</b> to <b>{item.counterpartyName}</b></h2>
+          {description}
           <div className={styles.title_secondary}>
-            <span className={styles.secondary_date}>{item.timestamp || 'never'}</span>
+            <span className={styles.secondary_date}>{date || 'never'}</span>
           </div>
         </div>
       </div>

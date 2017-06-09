@@ -3,7 +3,8 @@ import { ADD_SBOT, ADD_ID } from '../actions/ssb'
 const ssbState = {
   sbot: {},
   name: '',
-  id: ''
+  id: '',
+  photo: ''
 }
 
 export default function ssb (state = ssbState, action) {
@@ -17,7 +18,8 @@ export default function ssb (state = ssbState, action) {
       return {
         ...state,
         name: action.payload.name,
-        id: action.payload.id
+        id: action.payload.id,
+        photo: action.payload.photo
       }
     default:
       return state

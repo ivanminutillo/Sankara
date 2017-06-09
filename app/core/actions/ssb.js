@@ -9,11 +9,12 @@ export const addSSBAction = (sbot) => {
 }
 
 
-export const addIdentityAction = (name, id) => {
+export const addIdentityAction = (name, photo, id) => {
   return {
     type: 'ADD_ID',
     payload: {
       name,
+      photo,
       id
     }
   }
