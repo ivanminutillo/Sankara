@@ -29,6 +29,7 @@
             text-transform: uppercase;
             .item_link {
                 position: relative;
+                color: white;
                 &.active {
                 @include text-general-black(white);
                 &:before {

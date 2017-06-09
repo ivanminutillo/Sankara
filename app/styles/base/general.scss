@@ -40,7 +40,7 @@ input:-moz-placeholder { color: $p300; opacity: .7; }
 
 a {
   text-decoration: none;
-  @include text-general-black($p100);
+  @include text-general-black($p900);
   font-weight: 500;
 }
 

@@ -10,7 +10,8 @@ function mapStateToProps (state) {
     feed: state.feed,
     updatedFeed: state.updatedFeed,
     mutual: state.mutual,
-    currency: state.currency
+    currency: state.currency,
+    friends: state.friends
   }
 }
 

@@ -7,6 +7,10 @@ var pull = require('pull-stream')
 var schemas = require('../utils/mutualSsb/schemas')
 import getAvatar from 'ssb-avatar'
 var paramap = require('pull-paramap')
+import Mutual from '../utils/mutualSsb'
+var createFeed = window.require('ssb-feed')
+var ssbKeys = window.require('ssb-keys')
+
 
 class Currency extends Component {
   constructor () {
@@ -16,7 +20,8 @@ class Currency extends Component {
     this.handleAmount = this.handleAmount.bind(this)
     this.handleMemo = this.handleMemo.bind(this)
     this.state = {
-      to: '',
+      account: '',
+      name: '',
       amount: 0,
       description: ''
     }
@@ -32,7 +37,7 @@ class Currency extends Component {
         this.props.mutual.streamAccountHistory({account: this.props.sbot.id}),
         pull.collect(function (err, tsx) {
         })
-      )  
+      )
     }
     if (prevProps.feed.length !== this.props.feed.length) {
       pull(
@@ -48,7 +53,6 @@ class Currency extends Component {
         }),
         paramap(function (data, cb) {
           getAvatar(_this.props.sbot, data.counterparty, data.counterparty, function (err, counterInfo) {
-            console.log(counterInfo)
             let newTx = {
               ...data,
               counterpartyName: counterInfo.name
@@ -63,11 +67,19 @@ class Currency extends Component {
     }
   }
 
-  handleAccount (e) {
-    this.setState({
-      ...this.state,
-      to: e.target.value
-    })
+  handleAccount (item) {
+    if (item === null) {
+      this.setState({
+        name: '',
+        account: ''
+      })
+    } else {
+      this.setState({
+        ...this.state,
+        name: item.value,
+        account: item.label
+      })
+    }
   }
 
   handleAmount (e) {
@@ -88,18 +100,25 @@ class Currency extends Component {
     let _this = this
     let tx = {
       type: 'mutual/credit',
-      account: _this.state.to,
+      account: _this.state.name,
       amount: _this.state.amount,
       currency: _this.props.match.params.name,
       memo: _this.state.description
     }
-    this.props.sbot.publish(tx, function (err, msg) {
+    console.log(tx)
+     var value = schemas.credit('@iL6NzQoOLFP18pCpprkbY80DMtiG4JFFtVSVUaoGsOQ=.ed25519', 1.5, 'FOO', 'send some foo')
+    // let value = schemas.credit("@iL6NzQoOLFP18pCpprkbY80DMtiG4JFFtVSVUaoGsOQ=.ed25519", 1, 'ECO', 'gift')
+    console.log(value)
+    var bob = createFeed(this.props.sbot, ssbKeys.generate())
+    console.log(bob)
+    bob.add(value, function (err, msg) {
       if (err) throw err
-      console.log(msg)
+      console.log('good')
     })
   }
 
   render () {
+    console.log(this.state.account)
     return (
       <div>
         <Hero
@@ -111,12 +130,15 @@ class Currency extends Component {
           <div className={styles.columns + ' ' + styles['medium-centered'] + ' ' + styles['medium-10']}>
             <Tx
               account={this.state.account}
+              name={this.state.name}
               amount={this.state.amount}
               memo={this.state.description}
               sendTx={this.sendTx}
               handleAccount={this.handleAccount}
               handleAmount={this.handleAmount}
               handleMemo={this.handleMemo}
+              getOptions={this.getOptions}
+              friends={this.props.friends}
             />
             <Feed
               currency={this.props.match.params.name}

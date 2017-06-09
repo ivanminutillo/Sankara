@@ -5,11 +5,13 @@ import styles from './sitetemplate.scss'
 let ssbClient = window.require('ssb-client')
 import { connect } from 'react-redux'
 import {addSSBAction, addIdentityAction} from '../core/actions/ssb'
-import {getFeedAction, getUserFeedAction, updateFeedWithNameAction} from '../core/actions/feed'
+import {getFeedAction, getUserFeedAction, updateFeedWithNameAction, addFriendsAction} from '../core/actions/feed'
 import {addMutualAction} from '../core/actions/mutual'
 var pull = require('pull-stream')
 import Mutual from '../utils/mutualSsb'
 import getAvatar from 'ssb-avatar'
+var paramap = require('pull-paramap')
+
 
 class SiteTemplate extends Component {
   constructor () {
@@ -19,9 +21,10 @@ class SiteTemplate extends Component {
 
   connectionManager () {
     let _this = this
+
     ssbClient(function (err, sbot) {
       if (err) throw err
-      _this.props.addSSB(sbot)
+       _this.props.addSSB(sbot)
       let mutual = Mutual.init(_this.props.sbot)
       _this.props.addMutual(mutual)
       getAvatar(sbot, sbot.id, sbot.it, function (err, info) {
@@ -33,7 +36,6 @@ class SiteTemplate extends Component {
         pull.collect(function (err, txs) {
           if (err) throw err
           txs.map(tx => {
-            console.log(tx)
             if (tx.counterparty.startsWith('@') || tx.counterparty.startsWith('%')) {
               return _this.props.getFeed(tx)
             }
@@ -47,6 +49,24 @@ class SiteTemplate extends Component {
           _this.props.getUserFeed(txs)
         })
       )
+      sbot.friends.hops(sbot.id, 'follow', {dunbar: 10, hops: 1}, function (err, friends) {
+        if (err) throw err
+        let friendsId = Object.keys(friends)
+        pull(
+          pull.values(friendsId),
+          paramap(function (friend, cb) {
+            getAvatar(_this.props.sbot, friend, friend, function (err, info) {
+              cb(err, {
+                value: info.id,
+                label: info.name
+              })
+            })
+          }),
+          pull.collect(function (err, msgs) {
+            _this.props.addFriends(msgs)
+          })
+        )
+      })
     })
   }
 
@@ -96,6 +116,9 @@ function mapDispatchToProps (dispatch) {
     },
     updateFeed: (id, name) => {
       dispatch(updateFeedWithNameAction(id, name))
+    },
+    addFriends: (friends) => {
+      dispatch(addFriendsAction(friends))
     }
   }
 }

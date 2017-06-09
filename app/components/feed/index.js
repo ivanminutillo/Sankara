@@ -1,6 +1,7 @@
 import * as React from 'react'
 import styles from './feed.scss'
 import moment from 'moment'
+import { NavLink } from 'react-router-dom'
 
 const Feed = (props) => {
   let currencyFeed = []
@@ -18,7 +19,7 @@ const Feed = (props) => {
       <div key={i} className={styles.list_item}>
         <div className={styles.item_title}>
           <span className={styles.title_photo} />
-          <h2 className={styles.title_info}><b>{item.authorName}</b> sent <b>{item.amount} {props.currency}</b> to <b>{item.counterpartyName}</b></h2>
+          <h2 className={styles.title_info}><NavLink to={'user/' + item.author}><b id={item.author}>{item.authorName}</b></NavLink> sent <b>{item.amount} {props.currency}</b> to <NavLink to={'user/' + item.author}>{item.counterpartyName}</NavLink></h2>
           {description}
           <div className={styles.title_secondary}>
             <span className={styles.secondary_date}>{date || 'never'}</span>
