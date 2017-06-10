@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import Currency from '../components/Currency'
 import {updateBalanceAction} from '../core/actions/currency'
-import {updateFeedAction} from '../core/actions/feed'
+import {updateFeedAction, getFeedAction} from '../core/actions/feed'
 function mapStateToProps (state) {
   return {
     sbot: state.ssb.sbot,
@@ -22,6 +22,9 @@ function mapDispatchToProps (dispatch) {
     },
     updateFeed: (feed) => {
       dispatch(updateFeedAction(feed))
+    },
+    getFeed: (feed) => {
+      dispatch(getFeedAction(feed))
     }
   }
 }

@@ -6,8 +6,8 @@ export function feed (state = feedState, action) {
   switch (action.type) {
     case GET_FEED:
       return [
-        ...state,
-        action.payload
+        action.payload,
+        ...state
       ]
     default:
       return state

@@ -8,8 +8,6 @@ var schemas = require('../utils/mutualSsb/schemas')
 import getAvatar from 'ssb-avatar'
 var paramap = require('pull-paramap')
 import Mutual from '../utils/mutualSsb'
-var createFeed = window.require('ssb-feed')
-var ssbKeys = window.require('ssb-keys')
 
 
 class Currency extends Component {
@@ -33,11 +31,6 @@ class Currency extends Component {
       this.props.mutual.getAccountBalance({account: this.props.sbot.id, currency: this.props.match.params.name}, function (err, amount) {
         _this.props.updateBalance(amount)
       })
-      pull(
-        this.props.mutual.streamAccountHistory({account: this.props.sbot.id}),
-        pull.collect(function (err, tsx) {
-        })
-      )
     }
     if (prevProps.feed.length !== this.props.feed.length) {
       pull(
@@ -96,6 +89,39 @@ class Currency extends Component {
     })
   }
 
+  publish (sbot, value, recps, cb) {
+    if (process.env.DRY_RUN) throw JSON.stringify([recps, value], 0, 2)
+    if (recps) value.recps = recps, sbot.private.publish(value, recps, cb)
+    else sbot.publish(value, cb)
+  }
+
+
+  publishCredit (value, pub) {
+    var _this = this
+    // var recps = public ? null :
+    //   value.account[0] === '@' ? [this.selfId, value.account] : [this.selfId]
+    this.publish(this.props.sbot, value, null, function (err, msg) {
+      if (err) throw err
+      let tx = {
+        amount: msg.value.content.amount,
+        author: msg.value.author,
+        counterparty: msg.value.content.account,
+        currency: msg.value.content.currency,
+        id: msg.key,
+        memo: msg.value.content.memo,
+        private: false,
+        timestamp: msg.value.timestamp
+      }
+      _this.setState({
+        account: '',
+        name: '',
+        amount: 0,
+        description: ''
+      })
+      return _this.props.getFeed(tx)
+    })
+  }
+
   sendTx () {
     let _this = this
     let tx = {
@@ -105,20 +131,11 @@ class Currency extends Component {
       currency: _this.props.match.params.name,
       memo: _this.state.description
     }
-    console.log(tx)
-     var value = schemas.credit('@iL6NzQoOLFP18pCpprkbY80DMtiG4JFFtVSVUaoGsOQ=.ed25519', 1.5, 'FOO', 'send some foo')
-    // let value = schemas.credit("@iL6NzQoOLFP18pCpprkbY80DMtiG4JFFtVSVUaoGsOQ=.ed25519", 1, 'ECO', 'gift')
-    console.log(value)
-    var bob = createFeed(this.props.sbot, ssbKeys.generate())
-    console.log(bob)
-    bob.add(value, function (err, msg) {
-      if (err) throw err
-      console.log('good')
-    })
+    var value = schemas.credit(tx.account, tx.amount, tx.currency, tx.memo)
+    return this.publishCredit(value)
   }
 
   render () {
-    console.log(this.state.account)
     return (
       <div>
         <Hero

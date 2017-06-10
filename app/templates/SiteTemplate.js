@@ -37,6 +37,7 @@ class SiteTemplate extends Component {
           if (err) throw err
           txs.map(tx => {
             if (tx.counterparty.startsWith('@') || tx.counterparty.startsWith('%')) {
+              console.log(tx)
               return _this.props.getFeed(tx)
             }
           })
