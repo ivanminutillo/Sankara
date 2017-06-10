@@ -11,12 +11,76 @@ var pull = require('pull-stream')
 import Mutual from '../utils/mutualSsb'
 import getAvatar from 'ssb-avatar'
 var paramap = require('pull-paramap')
-
+var schemas = require('../utils/mutualSsb/schemas')
 
 class SiteTemplate extends Component {
   constructor () {
     super()
     this.connectionManager = this.connectionManager.bind(this)
+    this.handleJoinButton = this.handleJoinButton.bind(this)
+    this.joinCurrency = this.joinCurrency.bind(this)
+    this.updateCurrencyValue = this.updateCurrencyValue.bind(this)
+    this.state = {
+      activeJoin: false,
+      currencyToJoin: ''
+    }
+  }
+
+
+  publishCredit (value, pub) {
+    var _this = this
+    // var recps = public ? null :
+    //   value.account[0] === '@' ? [this.selfId, value.account] : [this.selfId]
+    this.publish(this.props.sbot, value, null, function (err, msg) {
+      if (err) throw err
+      let tx = {
+        amount: msg.value.content.amount,
+        author: msg.value.author,
+        counterparty: msg.value.content.account,
+        currency: msg.value.content.currency,
+        id: msg.key,
+        memo: msg.value.content.memo,
+        private: false,
+        timestamp: msg.value.timestamp
+      }
+      _this.setState({
+        account: '',
+        name: '',
+        amount: 0,
+        description: ''
+      })
+      window.location.reload()
+    })
+  }
+
+  publish (sbot, value, recps, cb) {
+    if (process.env.DRY_RUN) throw JSON.stringify([recps, value], 0, 2)
+    if (recps) value.recps = recps, sbot.private.publish(value, recps, cb)
+    else sbot.publish(value, cb)
+  }
+
+  joinCurrency () {
+    let tx = {
+      type: 'mutual/credit',
+      account: this.props.id,
+      amount: 1,
+      currency: this.state.currencyToJoin,
+      memo: 'Joined the ' + this.state.currencyToJoin + ' currency'
+    }
+    var value = schemas.credit(tx.account, tx.amount, tx.currency, tx.memo)
+    return this.publishCredit(value)
+  }
+
+  updateCurrencyValue (e) {
+    this.setState({
+      currencyToJoin: e.target.value
+    })
+  }
+
+  handleJoinButton () {
+    this.setState({
+      activeJoin: !this.state.activeJoin
+    })
   }
 
   connectionManager () {
@@ -79,7 +143,14 @@ class SiteTemplate extends Component {
     return (
       <div>
         <Header name={this.props.name} />
-        <Sidebar currencies={this.props.userFeed} />
+        <Sidebar
+          currencies={this.props.userFeed}
+          handleJoinButton={this.handleJoinButton}
+          activeJoin={this.state.activeJoin}
+          joinCurrency={this.joinCurrency}
+          updateCurrencyValue={this.updateCurrencyValue}
+          currencyToJoin={this.state.currencyToJoin}
+         />
         <div className={styles.wrapper}>
           {this.props.children}
         </div>
