@@ -179,7 +179,7 @@ class Currency extends Component {
       <div>
         <Hero
           currency={this.props.match.params.name}
-          memberList={this.props.feed}
+          memberList={currentFeed}
           balance={flattenedbalance}
         />
         <div className={styles.row}>
