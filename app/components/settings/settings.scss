@@ -1,0 +1,17 @@
+@import "../../styles/app.scss";
+.settings {
+    height: 200px;
+    margin-top: 40px;
+    box-shadow: 0 1px 4px 0px rgba(0,0,0,.2);
+    border-radius: 2px;
+    background: white;
+    .settings_title {
+      height: 30px;
+      @include text-mini-black(#6C6C6C);
+      text-transform: uppercase;
+      line-height: 30px;
+      border-bottom: 1px solid #E7E7E7;
+      background: #F6F6F6;
+      padding-left: 10px;
+    }
+}

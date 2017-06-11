@@ -26,7 +26,7 @@ class Currency extends Component {
 
   componentDidMount () {
     let _this = this
-    if (this.props.mutual) {
+    if (this.props.mutual.streamTransactions) {
       pull(
         this.props.mutual.streamTransactions({account: this.props.id}),
         pull.filter(tx => tx.currency === _this.props.match.params.name && (tx.counterparty.startsWith('@') || tx.counterparty.startsWith('%'))),
