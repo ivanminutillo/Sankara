@@ -6,7 +6,8 @@ function mapStateToProps (state) {
     sbot: state.ssb.sbot,
     name: state.ssb.name,
     id: state.ssb.id,
-    feed: state.feed
+    userFeed: state.userFeed,
+    mutual: state.mutual
   }
 }
 

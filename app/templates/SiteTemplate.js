@@ -103,6 +103,33 @@ class SiteTemplate extends Component {
       })
       pull(
         mutual.streamAccountHistory({account: sbot.id}),
+        pull.filter(tx => tx.counterparty.startsWith('@') || tx.counterparty.startsWith('%')),
+        paramap(function (data, cb) {
+          if (data.author) {
+            getAvatar(_this.props.sbot, data.author, data.author, function (err, info) {
+              let newTx = {
+                ...data,
+                authorName: info.name
+              }
+              cb(err, newTx)
+            })
+          } else {
+            let newTx = {
+              ...data,
+              authorName: _this.props.name
+            }
+            cb(err, newTx)
+          }
+        }),
+        paramap(function (data, cb) {
+          getAvatar(_this.props.sbot, data.counterparty, data.counterparty, function (err, info) {
+            let newTx = {
+              ...data,
+              counterpartyName: info.name
+            }
+            cb(err, newTx)
+          })
+        }),
         pull.collect(function (err, txs) {
           if (err) throw err
           _this.props.getUserFeed(txs)

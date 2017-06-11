@@ -26,7 +26,10 @@ class Currency extends Component {
 
   componentDidUpdate (prevProps) {
     let _this = this
-    if ((prevProps.mutual !== this.props.mutual && this.props.mutual.config) || (this.props.mutual.config && prevProps.location.pathname !== this.props.location.pathname)) {
+    console.log(prevProps.location.pathname)
+    console.log(this.props.location.pathname)
+    if ((prevProps.mutual !== this.props.mutual && this.props.mutual.config) || (prevProps.location.pathname !== this.props.location.pathname)) {
+      console.log('ciao')
       pull(
         this.props.mutual.streamTransactions({account: this.props.id}),
         pull.filter(tx => tx.currency === _this.props.match.params.name && (tx.counterparty.startsWith('@') || tx.counterparty.startsWith('%'))),
@@ -163,7 +166,6 @@ class Currency extends Component {
               mutual={this.props.mutual}
             />
             <Feed
-              currency={this.props.match.params.name}
               feed={flattenedFeed}
             />
           </div>

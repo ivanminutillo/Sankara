@@ -6,7 +6,6 @@ import { NavLink } from 'react-router-dom'
 const Feed = (props) => {
   let currencyFeed = []
   currencyFeed = props.feed
-  .filter(item => item.currency === props.currency)
   .map(function (item, i) {
     let date = moment.unix(item.timestamp / 1000).format('DD MMM YYYY - hh:mm a')
     let description = (<div />)
@@ -30,7 +29,7 @@ const Feed = (props) => {
   })
   return (
     <section className={styles.feed}>
-      <h4 className={styles.feed_title}>feed</h4>
+      <h4 className={styles.feed_title}>{props.title || 'Feed'}</h4>
       <div className={styles.feed_list}>
         {currencyFeed}
       </div>
