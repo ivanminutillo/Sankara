@@ -24,12 +24,44 @@ class Currency extends Component {
     }
   }
 
+  componentDidMount () {
+    let _this = this
+    if (this.props.mutual) {
+      pull(
+        this.props.mutual.streamTransactions({account: this.props.id}),
+        pull.filter(tx => tx.currency === _this.props.match.params.name && (tx.counterparty.startsWith('@') || tx.counterparty.startsWith('%'))),
+        paramap(function (data, cb) {
+          getAvatar(_this.props.sbot, data.author, data.author, function (err, info) {
+            let newTx = {
+              ...data,
+              authorName: info.name
+            }
+            cb(err, newTx)
+          })
+        }),
+        paramap(function (data, cb) {
+          getAvatar(_this.props.sbot, data.counterparty, data.counterparty, function (err, info) {
+            let newTx = {
+              ...data,
+              counterpartyName: info.name
+            }
+            cb(err, newTx)
+          })
+        }),
+        pull.collect(function (err, txs) {
+          if (err) throw err
+          _this.props.getFeed(txs, _this.props.match.params.name)
+          _this.props.mutual.getAccountBalance({account: _this.props.sbot.id, currency: _this.props.match.params.name}, function (err, amount) {
+            return _this.props.updateBalance(amount, _this.props.match.params.name)
+          })
+        })
+      )
+    }
+  }
+
   componentDidUpdate (prevProps) {
     let _this = this
-    console.log(prevProps.location.pathname)
-    console.log(this.props.location.pathname)
     if ((prevProps.mutual !== this.props.mutual && this.props.mutual.config) || (prevProps.location.pathname !== this.props.location.pathname)) {
-      console.log('ciao')
       pull(
         this.props.mutual.streamTransactions({account: this.props.id}),
         pull.filter(tx => tx.currency === _this.props.match.params.name && (tx.counterparty.startsWith('@') || tx.counterparty.startsWith('%'))),
