@@ -71,6 +71,21 @@
     visibility: visible !important;
 }
 
+.popup_cancel {
+    position: relative;
+    &:after {
+        position: absolute;
+        content: "X";
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background: #d4d4d4;
+        @include text-general-black($p900);
+        line-height: 30px;
+    }
+}
+
 .join_popup {
     position: absolute;
     bottom: -60px;

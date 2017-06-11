@@ -49,7 +49,13 @@ class SiteTemplate extends Component {
         amount: 0,
         description: ''
       })
-      window.location.reload()
+      pull(
+        _this.props.mutual.streamAccountHistory({account: _this.props.id}),
+        pull.collect(function (err, txs) {
+          if (err) throw err
+          _this.props.getUserFeed(txs)
+        })
+      )
     })
   }
 
@@ -101,7 +107,6 @@ class SiteTemplate extends Component {
           if (err) throw err
           txs.map(tx => {
             if (tx.counterparty.startsWith('@') || tx.counterparty.startsWith('%')) {
-              console.log(tx)
               return _this.props.getFeed(tx)
             }
           })
@@ -165,7 +170,8 @@ function mapStateToProps (state) {
     name: state.ssb.name,
     id: state.ssb.id,
     userFeed: state.userFeed,
-    feed: state.feed
+    feed: state.feed,
+    mutual: state.mutual
   }
 }
 

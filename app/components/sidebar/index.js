@@ -23,7 +23,7 @@ const Sidebar = (props) => {
         <input value={props.currencyToJoin} onChange={props.updateCurrencyValue} placeholder='currency...' />
         <button onClick={() => props.joinCurrency()}>Join</button>
       </div>
-      <button onClick={() => props.handleJoinButton()}className={styles.sidebar_join}>Join a new currency</button>
+      <button onClick={() => props.handleJoinButton()} className={props.activeJoin ? styles.sidebar_join + ' ' + styles.popup_cancel : styles.sidebar_join}>Join a new currency</button>
     </aside>
   )
 }
