@@ -2,14 +2,14 @@ import React, {Component} from 'react'
 import Sidebar from '../components/sidebar'
 import Header from '../components/header'
 import styles from './sitetemplate.scss'
-let ssbClient = window.require('ssb-client')
 import { connect } from 'react-redux'
 import {addSSBAction, addIdentityAction} from '../core/actions/ssb'
-import {getFeedAction, getUserFeedAction, updateFeedWithNameAction, addFriendsAction} from '../core/actions/feed'
+import {getUserFeedAction, updateFeedWithNameAction, addFriendsAction} from '../core/actions/feed'
 import {addMutualAction} from '../core/actions/mutual'
-var pull = require('pull-stream')
 import Mutual from '../utils/mutualSsb'
 import getAvatar from 'ssb-avatar'
+let ssbClient = window.require('ssb-client')
+var pull = require('pull-stream')
 var paramap = require('pull-paramap')
 var schemas = require('../utils/mutualSsb/schemas')
 
@@ -102,17 +102,6 @@ class SiteTemplate extends Component {
         _this.props.addIdentity(info.name, info.image, info.from)
       })
       pull(
-        mutual.streamTransactions({account: sbot.id}),
-        pull.collect(function (err, txs) {
-          if (err) throw err
-          txs.map(tx => {
-            if (tx.counterparty.startsWith('@') || tx.counterparty.startsWith('%')) {
-              return _this.props.getFeed(tx)
-            }
-          })
-        })
-      )
-      pull(
         mutual.streamAccountHistory({account: sbot.id}),
         pull.collect(function (err, txs) {
           if (err) throw err
@@ -185,9 +174,6 @@ function mapDispatchToProps (dispatch) {
     },
     addIdentity: (name, photo, id) => {
       dispatch(addIdentityAction(name, photo, id))
-    },
-    getFeed: (feed) => {
-      dispatch(getFeedAction(feed))
     },
     getUserFeed: (feed) => {
       dispatch(getUserFeedAction(feed))

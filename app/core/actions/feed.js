@@ -3,10 +3,12 @@ export const GET_USER_FEED = 'GET_USER_FEED'
 export const UPDATE_FEED = 'UPDATE_FEED'
 export const GET_FRIENDS = 'GET_FRIENDS'
 
-export const getFeedAction = (feed) => {
+export const getFeedAction = (feed, currency) => {
   return {
     type: 'GET_FEED',
-    payload: feed
+    payload: {
+      feed, currency
+    }
   }
 }
 
@@ -17,10 +19,12 @@ export const getUserFeedAction = (feed) => {
   }
 }
 
-export const updateFeedAction = (feed) => {
+export const updateFeedAction = (tx, currency) => {
   return {
     type: UPDATE_FEED,
-    payload: feed
+    payload: {
+      tx, currency
+    }
   }
 }
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Tx from './tx'
+import Feed from './feed'
 import styles from './page.scss'
 
 export default class Home extends Component {
@@ -58,15 +58,9 @@ export default class Home extends Component {
        <div className={styles.row}>
           <div className={styles.columns + ' ' + styles['medium-centered'] + ' ' + styles['medium-10']}>
            <h1>sadjdsajiojadsiasji</h1>
-            <Tx
-              account={this.state.account}
-              amount={this.state.amount}
-              memo={this.state.description}
-              sendTx={this.sendTx}
-              handleAccount={this.handleAccount}
-              handleAmount={this.handleAmount}
-              handleMemo={this.handleMemo}
-            />
+             {/*<Feed
+              feed={this.props.updatedFeed}
+            />*/}
           </div>
         </div>
       </div>

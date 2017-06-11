@@ -17,14 +17,14 @@ function mapStateToProps (state) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    updateBalance: (amount) => {
-      dispatch(updateBalanceAction(amount))
+    updateBalance: (amount, currency) => {
+      dispatch(updateBalanceAction(amount, currency))
     },
-    updateFeed: (feed) => {
-      dispatch(updateFeedAction(feed))
+    updateFeed: (tx, currency) => {
+      dispatch(updateFeedAction(tx, currency))
     },
-    getFeed: (feed) => {
-      dispatch(getFeedAction(feed))
+    getFeed: (feed, currency) => {
+      dispatch(getFeedAction(feed, currency))
     }
   }
 }

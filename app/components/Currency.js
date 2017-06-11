@@ -5,9 +5,8 @@ import Feed from './feed'
 import styles from './page.scss'
 var pull = require('pull-stream')
 var schemas = require('../utils/mutualSsb/schemas')
-import getAvatar from 'ssb-avatar'
 var paramap = require('pull-paramap')
-import Mutual from '../utils/mutualSsb'
+import getAvatar from 'ssb-avatar'
 
 
 class Currency extends Component {
@@ -27,14 +26,10 @@ class Currency extends Component {
 
   componentDidUpdate (prevProps) {
     let _this = this
-    if (prevProps.mutual !== this.props.mutual && this.props.mutual.config ||  this.props.mutual.config && prevProps.location.pathname !== this.props.location.pathname) {
-      this.props.mutual.getAccountBalance({account: this.props.sbot.id, currency: this.props.match.params.name}, function (err, amount) {
-        _this.props.updateBalance(amount)
-      })
-    }
-    if (prevProps.feed.length !== this.props.feed.length) {
+    if ((prevProps.mutual !== this.props.mutual && this.props.mutual.config) || (this.props.mutual.config && prevProps.location.pathname !== this.props.location.pathname)) {
       pull(
-        pull.values(this.props.feed),
+        this.props.mutual.streamTransactions({account: this.props.id}),
+        pull.filter(tx => tx.currency === _this.props.match.params.name && (tx.counterparty.startsWith('@') || tx.counterparty.startsWith('%'))),
         paramap(function (data, cb) {
           getAvatar(_this.props.sbot, data.author, data.author, function (err, info) {
             let newTx = {
@@ -45,16 +40,20 @@ class Currency extends Component {
           })
         }),
         paramap(function (data, cb) {
-          getAvatar(_this.props.sbot, data.counterparty, data.counterparty, function (err, counterInfo) {
+          getAvatar(_this.props.sbot, data.counterparty, data.counterparty, function (err, info) {
             let newTx = {
               ...data,
-              counterpartyName: counterInfo.name
+              counterpartyName: info.name
             }
             cb(err, newTx)
           })
         }),
-        pull.collect((err, info) => {
-          _this.props.updateFeed(info)
+        pull.collect(function (err, txs) {
+          if (err) throw err
+          _this.props.getFeed(txs, _this.props.match.params.name)
+          _this.props.mutual.getAccountBalance({account: _this.props.sbot.id, currency: _this.props.match.params.name}, function (err, amount) {
+            return _this.props.updateBalance(amount, _this.props.match.params.name)
+          })
         })
       )
     }
@@ -118,7 +117,7 @@ class Currency extends Component {
         amount: 0,
         description: ''
       })
-      return _this.props.getFeed(tx)
+      return _this.props.updateFeed(tx, tx.currency)
     })
   }
 
@@ -136,12 +135,17 @@ class Currency extends Component {
   }
 
   render () {
+    let currentFeed = this.props.feed.filter(item => item.currency === this.props.match.params.name)
+    let feed = currentFeed.map(item => item.feed)
+    let flattenedFeed = [].concat(...feed)
+    let balance = currentFeed.map(item => item.balance)
+    let flattenedbalance = [].concat(...balance)
     return (
       <div>
         <Hero
           currency={this.props.match.params.name}
           memberList={this.props.feed}
-          balance={this.props.currency.balance}
+          balance={flattenedbalance}
         />
         <div className={styles.row}>
           <div className={styles.columns + ' ' + styles['medium-centered'] + ' ' + styles['medium-10']}>
@@ -156,10 +160,11 @@ class Currency extends Component {
               handleMemo={this.handleMemo}
               getOptions={this.getOptions}
               friends={this.props.friends}
+              mutual={this.props.mutual}
             />
             <Feed
               currency={this.props.match.params.name}
-              feed={this.props.updatedFeed}
+              feed={flattenedFeed}
             />
           </div>
         </div>
