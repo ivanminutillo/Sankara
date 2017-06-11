@@ -91,10 +91,11 @@ class SiteTemplate extends Component {
 
   connectionManager () {
     let _this = this
-
-    ssbClient(function (err, sbot) {
+    var createConfig = window.require('ssb-config/inject')
+    var config = createConfig(process.env.ssb_appname)
+    ssbClient(config, function (err, sbot) {
       if (err) throw err
-       _this.props.addSSB(sbot)
+      _this.props.addSSB(sbot)
       let mutual = Mutual.init(_this.props.sbot)
       _this.props.addMutual(mutual)
       getAvatar(sbot, sbot.id, sbot.it, function (err, info) {
