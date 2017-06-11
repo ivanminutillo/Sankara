@@ -1,6 +1,6 @@
 # SANKARA
 
-### An app for p2p mutual currency
+#### A wallet for mutual currencies based on scuttlebot
 
 <br/>
 
@@ -8,38 +8,30 @@
 
 ![Electron Boilerplate Demo](http://i.imgur.com/7xAqFrf.jpg)
 
-## Install
+## Getting started
 
-The app is based on [electron-react-boilerplate](https://github.com/chentsulin/electron-react-boilerplate)
+This app is based on [electron-react-boilerplate](https://github.com/chentsulin/electron-react-boilerplate)
 
 * **Note: requires a node version >= 6 and an npm version >= 3.**
 
 First, clone the repo via git:
 
 ```bash
-git clone --depth=1 https://github.com/ivanminutillo/Sankara your-project-name
-```
-
-And then install dependencies.
-**ProTip**: Install with [yarn](https://github.com/yarnpkg/yarn) for faster and safer installation:
-
-```bash
-$ cd your-project-name && npm install
-```
-
-## Run
-
-Start the app in the `dev` environment. This starts the renderer process in [**hot-module-replacement**](https://webpack.js.org/guides/hmr-react/) mode and starts a server sends hot updates to the renderer process:
-
-```bash
+$ git clone https://github.com/ivanminutillo/Sankara your-project-name
+$ yarn
 $ npm run dev
 ```
-
-You Run these two commands __simultaneously__ in different console tabs:
-
-```bash
-$ npm run hot-updates-server
-$ npm run start-hot-renderer
-```
+*In order to work, at this stage you need to run on your terminal ```sbot server``` or having another ssb app already running.*
 
 ## Features
+
+The app actually is just a POC, it implements the basic features in order to manage a mutual currencies wallet:
+
+- See all your transactions history
+- Join a new currency
+- See your balance in each currency you joined
+- See how many people use a currency
+- Send / receive transactions
+
+## Roadmap
+TODO
