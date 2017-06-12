@@ -125,7 +125,7 @@ class Currency extends Component {
 
   publish (sbot, value, recps, cb) {
     if (process.env.DRY_RUN) throw JSON.stringify([recps, value], 0, 2)
-    if (recps) value.recps = recps, sbot.private.publish(value, recps, cb)
+    if (recps) { value.recps = recps, sbot.private.publish(value, recps, cb) }
     else sbot.publish(value, cb)
   }
 
@@ -134,7 +134,7 @@ class Currency extends Component {
     var _this = this
     // var recps = public ? null :
     //   value.account[0] === '@' ? [this.selfId, value.account] : [this.selfId]
-    this.publish(this.props.sbot, value, null, function (err, msg) {
+    this.props.sbot.publish(value, function (err, msg) {
       if (err) throw err
       let tx = {
         amount: msg.value.content.amount,
@@ -152,7 +152,31 @@ class Currency extends Component {
         amount: 0,
         description: ''
       })
-      return _this.props.updateFeed(tx, tx.currency)
+      pull(
+        pull.values([tx]),
+        paramap(function (data, cb) {
+          getAvatar(_this.props.sbot, data.author, data.author, function (err, info) {
+            let newTx = {
+              ...data,
+              authorName: info.name
+            }
+            cb(err, newTx)
+          })
+        }),
+        paramap(function (data, cb) {
+          getAvatar(_this.props.sbot, data.counterparty, data.counterparty, function (err, info) {
+            let newTx = {
+              ...data,
+              counterpartyName: info.name
+            }
+            cb(err, newTx)
+          })
+        }),
+        pull.collect(function (err, txs) {
+          if (err) throw err
+          return _this.props.updateFeed(txs[0], tx.currency)
+        })
+      )
     })
   }
 

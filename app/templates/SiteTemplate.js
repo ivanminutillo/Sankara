@@ -66,6 +66,8 @@ class SiteTemplate extends Component {
   }
 
   joinCurrency () {
+    console.log(this.props.id)
+    let _this = this
     let tx = {
       type: 'mutual/credit',
       account: this.props.id,
@@ -74,7 +76,19 @@ class SiteTemplate extends Component {
       memo: 'Joined the ' + this.state.currencyToJoin + ' currency'
     }
     var value = schemas.credit(tx.account, tx.amount, tx.currency, tx.memo)
-    return this.publishCredit(value)
+    _this.props.sbot.publish(tx, function (err, msg) {
+      if (err) throw err
+      _this.setState({
+        currencyToJoin: ''
+      })
+      pull(
+        _this.props.mutual.streamAccountHistory({account: _this.props.id}),
+        pull.collect(function (err, txs) {
+          if (err) throw err
+          _this.props.getUserFeed(txs)
+        })
+      )
+    })
   }
 
   updateCurrencyValue (e) {

@@ -2,7 +2,6 @@ import * as React from 'react'
 import styles from './hero.scss'
 
 const Hero = (props) => {
-  console.log(props)
   let members
   if (props.memberList[0]) {
     members = props.memberList[0].members
