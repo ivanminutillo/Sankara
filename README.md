@@ -33,5 +33,9 @@ The app actually is just a POC, it implements the basic features in order to man
 - See how many people use a currency
 - Send / receive transactions
 
+## Open Questions
+- Can a user send a private Tx to another member?
+- How one or more users define the rules of a currency?
+
 ## Roadmap
 TODO
