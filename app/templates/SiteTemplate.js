@@ -6,12 +6,12 @@ import { connect } from 'react-redux'
 import {addSSBAction, addIdentityAction} from '../core/actions/ssb'
 import {getUserFeedAction, updateFeedWithNameAction, addFriendsAction} from '../core/actions/feed'
 import {addMutualAction} from '../core/actions/mutual'
-import Mutual from '../utils/mutualLib'
+import Mutual from 'ssb-mutual'
 import getAvatar from 'ssb-avatar'
 let ssbClient = window.require('ssb-client')
 var pull = require('pull-stream')
 var paramap = require('pull-paramap')
-var schemas = require('../utils/mutualLib/schemas')
+var schemas = require('ssb-mutual/schemas')
 
 class SiteTemplate extends Component {
   constructor () {

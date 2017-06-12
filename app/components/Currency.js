@@ -4,7 +4,7 @@ import Tx from './tx'
 import Feed from './feed'
 import styles from './page.scss'
 var pull = require('pull-stream')
-var schemas = require('../utils/mutualLib/schemas')
+var schemas = require('ssb-mutual/schemas')
 var paramap = require('pull-paramap')
 import getAvatar from 'ssb-avatar'
 
