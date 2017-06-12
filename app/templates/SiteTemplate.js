@@ -75,7 +75,7 @@ class SiteTemplate extends Component {
       currency: this.state.currencyToJoin,
       memo: 'Joined the ' + this.state.currencyToJoin + ' currency'
     }
-    var value = schemas.credit(tx.account, tx.amount, tx.currency, tx.memo)
+    // var value = schemas.credit(tx.account, tx.amount, tx.currency, tx.memo)
     _this.props.sbot.publish(tx, function (err, msg) {
       if (err) throw err
       _this.setState({

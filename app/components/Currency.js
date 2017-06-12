@@ -189,8 +189,8 @@ class Currency extends Component {
       currency: _this.props.match.params.name,
       memo: _this.state.description
     }
-    var value = schemas.credit(tx.account, tx.amount, tx.currency, tx.memo)
-    return this.publishCredit(value)
+    // var value = schemas.credit(tx.account, tx.amount, tx.currency, tx.memo)
+    return this.publishCredit(tx)
   }
 
   render () {
